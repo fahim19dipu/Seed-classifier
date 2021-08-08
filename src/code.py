@@ -19,7 +19,7 @@ from keras.initializers import glorot_uniform
 from sklearn.metrics import classification_report, confusion_matrix
 import my_resnet
 #%%
-train_path="F:/projects/Seed Classfication with ResNet50/roataed dataset"
+train_path="F:/projects/Seed Classfication with ResNet50/train"
 test_path ="F:/projects/Seed Classfication with ResNet50/test"
 class_names=os.listdir(train_path)
 class_names_test=os.listdir(test_path)
@@ -70,7 +70,7 @@ model = Model(inputs=base_model.input, outputs=headModel)
 
 #model.summary()
 #%%
-base_model.load_weights("F:/resnet50 extmnist/resnet50_weights_tf_dim_ordering_tf_kernels_notop.h5")
+base_model.load_weights("F:/projects/Seed-classifier/src/resnet50_weights_tf_dim_ordering_tf_kernels_notop.h5")
 
 
 for layer in base_model.layers:
@@ -85,7 +85,7 @@ model.compile(keras.optimizers.Adam(learning_rate=0.01),
              metrics=['accuracy'])    
 #%%
 es = EarlyStopping(monitor='val_accuracy', mode='max', verbose=1, patience=10, restore_best_weights=True)
-mc = ModelCheckpoint('my_best_model.h5', monitor='val_accuracy', mode='max',    save_best_only=True)
+mc = ModelCheckpoint('F:/projects/Seed-classifier/src/models/my_best_model.h5', monitor='val_accuracy', mode='max',save_best_only=True)
 
 H = model.fit_generator(train_generator,validation_data=validation_generator,epochs=30,verbose=1,callbacks=[mc,es])
 #%%
@@ -107,5 +107,5 @@ print(classification_report(test_generator.classes, y_pred, target_names=class_n
 
 
 model_json = modell.to_json()
-with open("model.json","w") as json_file:
+with open("F:/projects/Seed-classifier/src/models/model.json","w") as json_file:
   json_file.write(model_json)    
